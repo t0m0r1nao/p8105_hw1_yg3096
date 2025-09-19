@@ -8,6 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(moderndive)
 library(ggplot2)
 library(dplyr)
+library(tidyverse)
 data("early_january_weather")
 ```
 
@@ -28,3 +29,37 @@ ggsave(filename = "plot.png", plot = p)
 ```
 The plot shows that the temperature has a overall trend of increasing. Also,    
 the change of temperature in a single day has a periodic pattern.
+
+## Problem 2
+```{r}
+set.seed(123)
+
+# A random sample of size 10 from a standard normal distribution
+norm_sample <- rnorm(10)
+
+# A logical vector indicating whether elements of the sample are greater than 0
+logical_vec <- norm_sample > 0
+
+# A character vector of length 10
+char_vec <- c("a","b","c","d","e","f","g","h","i","j")
+
+# A factor vector of length 10 with 3 different factor levels
+factor_vec <- factor(sample(c("low","medium","high"), 10, replace = TRUE), 
+                     levels = c("low","medium","high"))
+
+df <- data.frame(norm_sample = norm_sample, logical_vec = logical_vec,
+                  char_vec = char_vec, factor_vec = factor_vec)
+
+mean_norm <- mean(df %>% pull(norm_sample)) # working, returns 0.07462564
+mean_logical <- mean(df %>% pull(logical_vec)) # working, returns 0.5
+# Not working: mean_char and mean_factor
+
+# Logical to numeric
+as.numeric(df$logical_vec) # TRUE -> 1, FALSE -> 0
+
+# Factor to numeric
+as.numeric(df$factor_vec) # returns (1,2,3), not the specific level
+
+# character to numeric (only if the character can be transfred into numbers)
+# as.numeric(df$char_vec) works if char_vec contains "1", "2"... 
+```
