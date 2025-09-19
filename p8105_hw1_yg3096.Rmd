@@ -5,24 +5,26 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(moderndive)
+library(ggplot2)
+library(dplyr)
+data("early_january_weather")
 ```
 
-## R Markdown
+## Problem 1
+The data has `r nrow(early_january_weather)` rows and `r ncol(early_january_weather)` columns.      
+Variables names are: `r paste(names(early_january_weather), collapse = ", ")`.    
+And the average temperature is `r round(mean(early_january_weather$temp, na.rm = TRUE), 2)`.
+```{r}
+# Plot temperature vs time, using color of points to show humidity
+p <- ggplot(early_january_weather, aes(x = time_hour, y = temp, 
+                                       color = humid)) +
+     geom_point() + labs(x = "Date", y = "Temperature", color = "Humidity",
+                         title = "Temperature vs Time (colored by humidity)")
+print(p)
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+# Save the plot
+ggsave(filename = "plot.png", plot = p)
 ```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+The plot shows that the temperature has a overall trend of increasing. Also,    
+the change of temperature in a single day has a periodic pattern.
